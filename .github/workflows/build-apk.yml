@@ -14,7 +14,14 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - run: mkdir www && cp index.html manifest.webmanifest sw.js icon-192.png icon-512.png www/
+      - name: Preparar archivos
+        run: |
+          echo "Archivos en el repositorio:"
+          ls -la
+          mkdir -p www
+          for f in index.html manifest.webmanifest sw.js icon-192.png icon-512.png; do
+            if [ -f "$f" ]; then cp -f "$f" www/; else echo "FALTA EL ARCHIVO: $f"; exit 1; fi
+          done
       - run: npm install
       - run: npx cap add android
       - name: Permiso de notificaciones
